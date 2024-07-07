@@ -1,0 +1,44 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.app-name {
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+.app-image {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 1em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--primary-color);
+  font-size: 1.2em;
+  text-decoration: none;
+  transition: color 0.3s;
+  margin: 0 1em;
+}
+
+.nav-link:hover {
+  color: var(--primary-color-hover);
+}
+
+.separator {
+  color: var(--primary-color);
+  font-size: 1.2em;
+}
