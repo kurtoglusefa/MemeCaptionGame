@@ -15,7 +15,6 @@
 - `Login` (in `Login.jsx`): Handles user login.
 - `Profile` (in `Profile.jsx`): Shows the user's profile, including scores and game history.
 - `Game` (in `Game.jsx`): Main game component where users can play the meme caption game.
-- `Navbar` (in `Navbar.jsx`): Navigation bar that appears on all pages.
 - `API` (in `API.js`): Contains functions to interact with the backend API.
 
 ## API Server
