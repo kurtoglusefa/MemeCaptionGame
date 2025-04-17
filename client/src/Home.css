@@ -8,6 +8,8 @@
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
   text-align: center;
+  background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
+  padding: 40px;
 }
 
 .app-name {
@@ -24,18 +26,21 @@
 .nav-links {
   display: flex;
   align-items: center;
+  gap: 1.5em;
 }
 
 .nav-link {
   color: var(--primary-color);
   font-size: 1.2em;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
   margin: 0 1em;
+  font-weight: bold;
 }
 
 .nav-link:hover {
   color: var(--primary-color-hover);
+  text-shadow: 0 0 5px var(--primary-color);
 }
 
 .separator {

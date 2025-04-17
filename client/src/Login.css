@@ -4,7 +4,10 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: var(--background-color);
+  background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   color: var(--text-color);
   font-family: 'Inter', sans-serif;
   text-align: center;
@@ -12,10 +15,18 @@
 
 .login-input {
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #444;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
   padding: 0.6em 1.2em;
   font-size: 1em;
   margin-bottom: 1em;
+}
+
+.login-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px var(--primary-color);
 }
 
 .login-button,
@@ -26,10 +37,11 @@
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: var(--button-background);
+  background: linear-gradient(45deg, var(--primary-color), #4e4ea3);
   cursor: pointer;
   transition: border-color 0.25s;
   color: var(--button-text-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .login-button:hover,

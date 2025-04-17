@@ -6,7 +6,6 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import '../Profile.css';
 
-// Extend dayjs with the plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -24,54 +23,48 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchScores();
-  }, []);
-
-  const fetchScores = async () => {
-    setLoading(true);
-    try {
-      const user1Id = 1;
-      const user2Id = 2;
-      const user1ScoresResponse = await API.getScoresByUserId(user1Id);
-      const user2ScoresResponse = await API.getScoresByUserId(user2Id);
-
-      setUser1Scores(
-        user1ScoresResponse
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          .slice(0, 3)
-      );
-      setUser2Scores(
-        user2ScoresResponse
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          .slice(0, 3)
-      );
-
-      const [totalScore1, totalScore2] = await Promise.all([
-        API.getTotalScoreByUserId(user1Id),
-        API.getTotalScoreByUserId(user2Id),
-      ]);
-      setUser1TotalScore(totalScore1.totalScore);
-      setUser2TotalScore(totalScore2.totalScore);
-    } catch (error) {
-      console.error('Failed to fetch scores', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEndGame = async () => {
-    console.log("handleEndGame called");
-    if (gameState.roundsPlayed >= 3) {
-      setGameState({
-        ...gameState,
-        gameCompleted: true,
-      });
-
+    const fetchScores = async () => {
+      setLoading(true);
       try {
         const user1Id = 1;
         const user2Id = 2;
+        const [user1ScoresResponse, user2ScoresResponse] = await Promise.all([
+          API.getScoresByUserId(user1Id),
+          API.getScoresByUserId(user2Id),
+        ]);
 
-        // Record game history for both users
+        setUser1Scores(
+          user1ScoresResponse
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 3)
+        );
+        setUser2Scores(
+          user2ScoresResponse
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 3)
+        );
+
+        const [totalScore1, totalScore2] = await Promise.all([
+          API.getTotalScoreByUserId(user1Id),
+          API.getTotalScoreByUserId(user2Id),
+        ]);
+        setUser1TotalScore(totalScore1.totalScore);
+        setUser2TotalScore(totalScore2.totalScore);
+      } catch (error) {
+        console.error('Failed to fetch scores', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchScores();
+  }, []);
+
+  const handleEndGame = async () => {
+    if (gameState.roundsPlayed >= 3) {
+      setGameState(prevState => ({ ...prevState, gameCompleted: true }));
+      try {
+        const user1Id = 1;
+        const user2Id = 2;
         for (const score of user1Scores) {
           await API.recordGameHistory(user1Id, score.meme_id, score.caption_id, score.score);
         }
@@ -81,24 +74,47 @@ function Profile() {
       } catch (error) {
         console.error('Failed to record game history', error);
       }
-
       navigate('/');
-      console.log("Navigating to home page");
     } else {
       console.log("Not enough rounds played to end the game");
     }
   };
 
   const handleNewGame = async () => {
-    console.log("handleNewGame called");
-    setGameState({
-      roundsPlayed: 0,
-      gameCompleted: false,
-    });
+    setGameState({ roundsPlayed: 0, gameCompleted: false });
     setUser1Scores([]);
     setUser2Scores([]);
     setUser1TotalScore(0);
     setUser2TotalScore(0);
+    // Re-fetch updated scores
+    const fetchScores = async () => {
+      try {
+        const user1Id = 1;
+        const user2Id = 2;
+        const [user1ScoresResponse, user2ScoresResponse] = await Promise.all([
+          API.getScoresByUserId(user1Id),
+          API.getScoresByUserId(user2Id),
+        ]);
+        setUser1Scores(
+          user1ScoresResponse
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 3)
+        );
+        setUser2Scores(
+          user2ScoresResponse
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, 3)
+        );
+        const [totalScore1, totalScore2] = await Promise.all([
+          API.getTotalScoreByUserId(user1Id),
+          API.getTotalScoreByUserId(user2Id),
+        ]);
+        setUser1TotalScore(totalScore1.totalScore);
+        setUser2TotalScore(totalScore2.totalScore);
+      } catch (error) {
+        console.error('Failed to fetch scores', error);
+      }
+    };
     fetchScores();
   };
 
@@ -107,16 +123,8 @@ function Profile() {
   };
 
   const calculateGameScore = (scores) => {
-    let gameScore = 0;
-    scores.forEach(score => {
-      if (score.matchedCorrectly && score.timeTaken <= 30) {
-        gameScore += 5;
-      }
-    });
-    return gameScore;
+    return scores.reduce((acc, score) => score.matchedCorrectly && score.timeTaken <= 30 ? acc + 5 : acc, 0);
   };
-
-  console.log("gameState:", gameState);
 
   return (
     <div className="profile-container">
@@ -156,7 +164,6 @@ function Profile() {
             </table>
           )}
         </div>
-
         <div className="user-scores">
           <h3>User 2 Scores</h3>
           <p>Total Score: {user2TotalScore}</p>
@@ -193,7 +200,6 @@ function Profile() {
           )}
         </div>
       </div>
-
       {gameState.roundsPlayed >= 3 && (
         <div className="game-summary">
           <h3>Game Summary</h3>
@@ -207,7 +213,6 @@ function Profile() {
           </ul>
         </div>
       )}
-
       <div className="button-container">
         {!gameState.gameCompleted ? (
           <>
@@ -217,7 +222,7 @@ function Profile() {
         ) : (
           <button onClick={handleNewGame}>New Game</button>
         )}
-        <button onClick={handleGoHome}>Go to Home Page</button> {/* New button to go to Home page */}
+        <button onClick={handleGoHome}>Go to Home Page</button>
       </div>
     </div>
   );
