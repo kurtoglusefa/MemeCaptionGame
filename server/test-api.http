@@ -27,63 +27,30 @@ POST {{APIURL}}/auth/logout HTTP/1.1
 ###
 
 // Start Game
-GET {{APIURL}}/game/start HTTP/1.1
-
-###
-
-
-// Next Meme
-GET {{APIURL}}/game/nextMeme HTTP/1.1
+POST {{APIURL}}/game/start HTTP/1.1
 
 ###
 
 // Submit Answer
-POST {{APIURL}}/game/submitAnswer HTTP/1.1
+POST {{APIURL}}/game/answer HTTP/1.1
 Content-Type: application/json
 
 {
-    "userId": "1",
-    "memeId": "1",
-    "captionId": "1"
+    "gameId": 1,
+    "memeId": 1,
+    "captionId": 1,
+    "timeTaken": 12
 }
 
 ###
-
-// Record Game History
-POST {{APIURL}}/game/recordGameHistory HTTP/1.1
-Content-Type: application/json
-
-{
-    "userId": "2",
-    "memeId": "1",
-    "captionId": "2",
-    "score":"",
-    "timestamp": "2024-06-25T12:00:00Z"
-}
-
-###
-
-
 
 
 ###
 ### Profile APIs
 ###
 
-// Get Scores by User ID
-GET {{APIURL}}/profile/1/scores HTTP/1.1
-
-###
-GET {{APIURL}}/profile/2/scores HTTP/1.1
-
-###
-
-// Get Total Score by User ID
-GET {{APIURL}}/profile/1/totalScore HTTP/1.1
-
-###
-
-GET {{APIURL}}/profile/2/totalScore HTTP/1.1
+// Get Profile Summary for Logged-in User
+GET {{APIURL}}/profile/me HTTP/1.1
 
 ###
 

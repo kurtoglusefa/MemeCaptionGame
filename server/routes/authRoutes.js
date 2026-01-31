@@ -1,11 +1,12 @@
 import express from 'express';
 import passport from 'passport';
-import { getUserByUsername } from '../userDAO.js';
+import { ensureAuthenticated } from '../middleware.js';
+import { sanitizeUser } from '../dao/users.js';
 
 const router = express.Router();
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send({ message: 'Logged in' });
+  res.send({ message: 'Logged in', user: sanitizeUser(req.user) });
 });
 
 router.post('/logout', (req, res, next) => {
@@ -15,14 +16,8 @@ router.post('/logout', (req, res, next) => {
   });
 });
 
-router.get('/user', (req, res) => {
-  if (req.user) {
-    getUserByUsername(req.user.username)
-      .then(user => res.json(user))
-      .catch(err => res.status(500).json({ error: 'Internal server error' }));
-  } else {
-    res.status(401).json({ error: 'Not authenticated' });
-  }
+router.get('/user', ensureAuthenticated, (req, res) => {
+  res.json({ user: sanitizeUser(req.user) });
 });
 
 export default router;

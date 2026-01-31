@@ -1,0 +1,57 @@
+:root {
+  --meme-ink: #0b1426;
+  --meme-accent: #1f71ff;
+  --meme-accent-soft: #e4ecff;
+  --meme-warm: #ffb84d;
+  --meme-surface: #ffffff;
+  --meme-muted: #667085;
+  --meme-border: #d6ddea;
+  --meme-shadow: 0 16px 40px rgba(11, 20, 38, 0.12);
+}
+
+body {
+  font-family: 'Titillium Web', sans-serif;
+  background: radial-gradient(circle at top, #f7f9ff 0%, #eef2ff 45%, #fef6e8 100%);
+  color: var(--meme-ink);
+}
+
+a {
+  color: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  padding: 2.5rem 0 4rem;
+}
+
+.card-elevated {
+  background: var(--meme-surface);
+  border: 1px solid var(--meme-border);
+  border-radius: 24px;
+  box-shadow: var(--meme-shadow);
+}
+
+.text-muted-soft {
+  color: var(--meme-muted);
+}
+
+.badge-soft {
+  background: var(--meme-accent-soft);
+  color: var(--meme-accent);
+}
+
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  background-color: #e3e7f3;
+}
+
+.progress-bar {
+  border-radius: 999px;
+}

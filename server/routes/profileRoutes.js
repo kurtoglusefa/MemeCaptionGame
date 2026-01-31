@@ -1,26 +1,30 @@
 import express from 'express';
-import { getScoresByUserId, getTotalScoreByUserId } from '../scoreDAO.js';
+import { ensureAuthenticated } from '../middleware.js';
+import {
+  getRecentGames,
+  getRecentRounds,
+  getUserTotalScore,
+} from '../dao/profile.js';
 
 const router = express.Router();
 
-router.get('/:userId/scores', async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    const scores = await getScoresByUserId(userId);
-    if (!scores) return res.status(404).json({ error: 'Scores not found' });
-    res.json(scores);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch scores' });
-  }
-});
+router.use(ensureAuthenticated);
 
-router.get('/:userId/totalScore', async (req, res) => {
-  const userId = req.params.userId;
+router.get('/me', async (req, res) => {
   try {
-    const totalScore = await getTotalScoreByUserId(userId);
-    res.json({ totalScore });
+    const [totalScore, recentGames, recentRounds] = await Promise.all([
+      getUserTotalScore(req.user.id),
+      getRecentGames(req.user.id, 5),
+      getRecentRounds(req.user.id, 10),
+    ]);
+
+    res.json({
+      totalScore,
+      recentGames,
+      recentRounds,
+    });
   } catch (error) {
-    res.status(500).send('Failed to fetch total score');
+    res.status(500).json({ error: 'Failed to fetch profile data' });
   }
 });
 

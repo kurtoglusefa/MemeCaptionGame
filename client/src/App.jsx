@@ -1,23 +1,39 @@
-import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login';
-import Game from './components/Game';
-import Profile from './components/Profile';
-import Home from './components/Home';
+import AppLayout from './components/layout/AppLayout.jsx';
+import RequireAuth from './components/RequireAuth.jsx';
+import Home from './pages/Home.jsx';
+import Login from './pages/Login.jsx';
+import Game from './pages/Game.jsx';
+import Profile from './pages/Profile.jsx';
+import NotFound from './pages/NotFound.jsx';
 
-
-function App() {
-  return (
-    <Router>
+const App = () => (
+  <Router>
+    <AppLayout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/game" element={<Game />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/game"
+          element={
+            <RequireAuth>
+              <Game />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-    </Router>
-  );
-}
+    </AppLayout>
+  </Router>
+);
 
 export default App;
